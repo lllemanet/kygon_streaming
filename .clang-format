@@ -5,3 +5,4 @@ AllowShortFunctionsOnASingleLine: Inline
 ColumnLimit: 110
 IndentWidth: 4
 SortIncludes: true
+AlignConsecutiveAssignments: true

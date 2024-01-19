@@ -2,17 +2,14 @@
 
 #include <QDebug>
 
-namespace kygon {
+#define TEST_AND_RETURN_FALSE(_x)                               \
+    do {                                                        \
+        bool _success = static_cast<bool>(_x);                  \
+        if (!_success) {                                        \
+            qKCritical() << __FUNCTION__ << ":" #_x " failed."; \
+            return false;                                       \
+        }                                                       \
+    } while (0)
 
-// TODO: consider thread-safety
-inline QDebug qKDebug() {
-    static QDebug qDebugSingleton = qDebug().noquote().nospace();
-    return qDebugSingleton;
-}
-
-inline QDebug qKCritical() {
-    static QDebug qCriticalSingleton = qCritical().noquote().nospace();
-    return qCriticalSingleton;
-}
-
-}  // namespace kygon
+#define qKDebug() qDebug().noquote().nospace()
+#define qKCritical() qCritical().noquote().nospace()
