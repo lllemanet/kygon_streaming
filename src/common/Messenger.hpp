@@ -30,6 +30,8 @@ struct Message {
 #pragma pack(pop)
 
 class Messenger {
+    Q_DISABLE_COPY_MOVE(Messenger)
+
 public:
     /**
      * @brief Construct a new Messenger object.

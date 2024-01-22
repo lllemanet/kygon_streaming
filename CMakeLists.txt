@@ -11,5 +11,8 @@ qt_standard_project_setup()
 
 include_directories(src)
 
+# https://doc.qt.io/qt-6/signalsandslots.html#using-qt-with-3rd-party-signals-and-slots
+set(GLOBAL_COMPILE_DEFINITIONS QT_NO_KEYWORDS)
+
 add_subdirectory(src/app)
 add_subdirectory(src/server)
