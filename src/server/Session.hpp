@@ -1,7 +1,11 @@
 #pragma once
 
-#include <QAbstractSocket>
 #include <QObject>
+#include <QString>
+
+#include "common/Messenger.hpp"
+
+class QAbstractSocket;
 
 namespace kygon::server {
 
@@ -15,12 +19,19 @@ class Session : public QObject {
 
 public:
     Session(QAbstractSocket* socket, QObject* parent = nullptr);
+    virtual ~Session() = default;
+
+    QString toString();
 
 Q_SIGNALS:
     void closed();
 
 private:
+    void handleMessage();
+
     QAbstractSocket* m_socket;
+    Messenger m_messenger;
+    bool m_authenticated;
 };
 
 }  // namespace kygon::server

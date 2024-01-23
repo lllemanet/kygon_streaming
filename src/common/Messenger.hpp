@@ -29,6 +29,8 @@ struct Message {
 };
 #pragma pack(pop)
 
+constexpr size_t kMessageHeaderSize = offsetof(Message, value);
+
 class Messenger {
     Q_DISABLE_COPY_MOVE(Messenger)
 
@@ -40,13 +42,15 @@ public:
      */
     Messenger(QAbstractSocket* socket);
 
+    bool sendSimpleMessage(MessageType type);
     bool sendUserAuth(const QString& username);
-    bool sendServerActiveUsers(/*TODO list of users*/);
     bool sendUserMessage(const QString& userMessage);
-
+    bool sendServerActiveUsers(/*TODO list of users*/);
     bool read(Message& message);
 
 private:
+    bool sendStringMessage(MessageType type, const QString& str);
+
     QAbstractSocket* m_socket;
 };
 

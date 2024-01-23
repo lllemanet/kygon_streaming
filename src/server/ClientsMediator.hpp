@@ -14,6 +14,7 @@ class ClientsMediator : public QObject {
 
 public:
     ClientsMediator(QObject* parent = nullptr);
+    virtual ~ClientsMediator() = default;
 
     /**
      * @brief ClientsMediator gets owneship of socket passed.

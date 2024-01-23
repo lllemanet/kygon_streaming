@@ -12,6 +12,7 @@ class Application : public QCoreApplication {
 
 public:
     Application(int argc, char* argv[]);
+    virtual ~Application() = default;
 
     /**
      * @brief Initialize the app. Should be called just after the constructor.

@@ -1,6 +1,7 @@
 #include "Messenger.hpp"
 
 #include <QAbstractSocket>
+#include <QHostAddress>
 
 #include "Utils.hpp"
 
@@ -19,11 +20,18 @@ QByteArray prepareMessageHeader(MessageType type, MessageLengthUint length) {
 
 Messenger::Messenger(QAbstractSocket* socket) : m_socket{socket} {}
 
-bool Messenger::sendUserAuth(const QString& username) {
-    QByteArray byteArray = prepareMessageHeader(MessageType::SendUserAuth, username.toUtf8().size());
-    byteArray.append(username.toUtf8());
-    TEST_AND_RETURN_FALSE(m_socket->write(byteArray) == byteArray.size());
+bool Messenger::sendSimpleMessage(MessageType type) {
+    QByteArray byteArray = prepareMessageHeader(type, 0);
+    if (m_socket->write(byteArray) != byteArray.size() || !m_socket->flush()) {
+        qKCritical() << "Can't write to socket " << m_socket->peerAddress() << ":" << m_socket->peerPort();
+        return false;
+    }
+
     return true;
+}
+
+bool Messenger::sendUserAuth(const QString& username) {
+    return sendStringMessage(MessageType::SendUserAuth, username);
 }
 
 bool Messenger::sendServerActiveUsers() {
@@ -32,17 +40,35 @@ bool Messenger::sendServerActiveUsers() {
 }
 
 bool Messenger::sendUserMessage(const QString& userMessage) {
-    QByteArray byteArray = prepareMessageHeader(MessageType::SendUserMessage, userMessage.toUtf8().size());
-    byteArray.append(userMessage.toUtf8());
-    TEST_AND_RETURN_FALSE(m_socket->write(byteArray) == byteArray.size());
-    return true;
+    return sendStringMessage(MessageType::SendUserMessage, userMessage);
 }
 
 bool Messenger::read(Message& message) {
-    TEST_AND_RETURN_FALSE(m_socket->read(reinterpret_cast<char*>(&message), offsetof(Message, value)) ==
-                          offsetof(Message, value));
-    message.value.resize(message.length);
-    TEST_AND_RETURN_FALSE(m_socket->read(message.value.data(), message.length) == message.length);
+    if (m_socket->read(reinterpret_cast<char*>(&message), kMessageHeaderSize) != kMessageHeaderSize) {
+        qKCritical() << "Can't read message header for " << m_socket->peerAddress() << ":"
+                     << m_socket->peerPort();
+        return false;
+    }
+
+    if (message.length > 0) {
+        message.value.resize(message.length);
+        if (m_socket->read(message.value.data(), message.length) != message.length) {
+            qKCritical() << "Can't read message body for " << m_socket->peerAddress() << ":"
+                         << m_socket->peerPort();
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool Messenger::sendStringMessage(MessageType type, const QString& str) {
+    QByteArray byteArray = prepareMessageHeader(type, str.toUtf8().size());
+    byteArray.append(str.toUtf8());
+    if (m_socket->write(byteArray) != byteArray.size() || !m_socket->flush()) {
+        qKCritical() << "Can't write to socket " << m_socket->peerAddress() << ":" << m_socket->peerPort();
+        return false;
+    }
     return true;
 }
 
