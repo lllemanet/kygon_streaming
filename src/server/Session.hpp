@@ -26,9 +26,10 @@ public:
 Q_SIGNALS:
     void closed();
 
-private:
+private Q_SLOTS:
     void handleMessage();
 
+private:
     QAbstractSocket* m_socket;
     Messenger m_messenger;
     bool m_authenticated;

@@ -1,8 +1,14 @@
-#include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
+#include "UiApplication.hpp"
+#include "common/Utils.hpp"
+
 int main(int argc, char *argv[]) {
-    QGuiApplication app(argc, argv);
+    kygon::client::UiApplication app(argc, argv);
+    if (!app.init()) {
+        qKCritical() << "Can't init UiApplication";
+        return -1;
+    }
 
     QQmlApplicationEngine engine;
     const QUrl url(u"qrc:/kygon/Main.qml"_qs);
