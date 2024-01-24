@@ -1,4 +1,4 @@
-qt_add_executable(${PROJECT_NAME} main.cpp UiApplication.cpp ServerSession.cpp ../common/Messenger.cpp)
+qt_add_executable(${PROJECT_NAME} main.cpp UiApplication.cpp Session.cpp ../common/Protocol.cpp)
 
 qt_add_qml_module(${PROJECT_NAME}
     URI ${PROJECT_NAME}

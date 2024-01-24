@@ -4,6 +4,11 @@
 
 namespace kygon::client {
 
+namespace {
+// TODO: temp
+QByteArray username{"username1"};
+}  // namespace
+
 UiApplication::UiApplication(int argc, char* argv[]) : QGuiApplication{argc, argv} {}
 
 bool UiApplication::init() {
@@ -15,14 +20,14 @@ bool UiApplication::init() {
 
     QHostAddress address{arguments().at(1)};
     auto port = arguments().at(2).toUInt();
-    if (!m_serverSession.init(address, port)) {
+    if (!m_session.init(address, port, username)) {
         qKDebug() << "Can't init " << address.toString() << ":" << port;
         return false;
     }
 
     // TODO: recover
-    connect(&m_serverSession, &ServerSession::closed, []() {
-        qKCritical() << "ServerSession closed, exitting app";
+    connect(&m_session, &Session::closed, []() {
+        qKCritical() << "Session closed, exitting app";
         QCoreApplication::exit(-1);
     });
 

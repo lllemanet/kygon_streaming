@@ -8,7 +8,7 @@ namespace kygon::server {
 ClientsMediator::ClientsMediator(QObject* parent) : QObject{parent} {}
 
 void ClientsMediator::addClientSession(QTcpSocket* socket) {
-    Session* session = new Session{socket};
+    Session* session = new Session{*socket};
     m_clientSessions.push_back(session);
     connect(session, &Session::closed, [this, session] {
         qKDebug() << "Session closed: " << session->toString();

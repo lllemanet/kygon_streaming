@@ -3,8 +3,6 @@
 #include <QObject>
 #include <QString>
 
-#include "common/Messenger.hpp"
-
 class QAbstractSocket;
 
 namespace kygon::server {
@@ -18,7 +16,7 @@ class Session : public QObject {
     Q_DISABLE_COPY_MOVE(Session)
 
 public:
-    Session(QAbstractSocket* socket, QObject* parent = nullptr);
+    Session(QAbstractSocket& socket, QObject* parent = nullptr);
     virtual ~Session() = default;
 
     QString toString();
@@ -30,9 +28,9 @@ private Q_SLOTS:
     void handleMessage();
 
 private:
-    QAbstractSocket* m_socket;
-    Messenger m_messenger;
+    QAbstractSocket& m_socket;
     bool m_authenticated;
+    QByteArray m_buffer;
 };
 
 }  // namespace kygon::server
