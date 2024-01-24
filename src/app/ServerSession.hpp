@@ -5,14 +5,17 @@
 
 namespace kygon::client {
 
-// TODO: come up with better name
-class Session : public QObject {
+/**
+ * @brief Server session. Implements protocol interactions.
+ * 
+ */
+class ServerSession : public QObject {
     Q_OBJECT
-    Q_DISABLE_COPY_MOVE(Session)
+    Q_DISABLE_COPY_MOVE(ServerSession)
 
 public:
-    Session(QObject* parent = nullptr);
-    virtual ~Session() = default;
+    ServerSession(QObject* parent = nullptr);
+    virtual ~ServerSession() = default;
 
     bool init(QHostAddress address, quint16 port, QString username);
 

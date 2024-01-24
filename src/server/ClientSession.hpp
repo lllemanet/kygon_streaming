@@ -8,16 +8,16 @@ class QAbstractSocket;
 namespace kygon::server {
 
 /**
- * @brief Client session.
+ * @brief Client session. Implements protocol interactions.
  *
  */
-class Session : public QObject {
+class ClientSession : public QObject {
     Q_OBJECT
-    Q_DISABLE_COPY_MOVE(Session)
+    Q_DISABLE_COPY_MOVE(ClientSession)
 
 public:
-    Session(QAbstractSocket& socket, QObject* parent = nullptr);
-    virtual ~Session() = default;
+    ClientSession(QAbstractSocket& socket, QObject* parent = nullptr);
+    virtual ~ClientSession() = default;
 
     QString toString();
 

@@ -1,4 +1,4 @@
-#include "Session.hpp"
+#include "ClientSession.hpp"
 
 #include <QAbstractSocket>
 #include <QHostAddress>
@@ -8,19 +8,19 @@
 
 namespace kygon::server {
 
-Session::Session(QAbstractSocket& socket, QObject* parent)
+ClientSession::ClientSession(QAbstractSocket& socket, QObject* parent)
     : QObject{parent}, m_socket{socket}, m_authenticated{false} {
     m_socket.setParent(this);
-    connect(&m_socket, &QAbstractSocket::readyRead, this, &Session::handleMessage);
-    connect(&m_socket, &QAbstractSocket::errorOccurred, this, &Session::closed);
-    connect(&m_socket, &QAbstractSocket::disconnected, this, &Session::closed);
+    connect(&m_socket, &QAbstractSocket::readyRead, this, &ClientSession::handleMessage);
+    connect(&m_socket, &QAbstractSocket::errorOccurred, this, &ClientSession::closed);
+    connect(&m_socket, &QAbstractSocket::disconnected, this, &ClientSession::closed);
 }
 
-QString Session::toString() {
+QString ClientSession::toString() {
     return QString(m_socket.peerAddress().toString() + ":" + QString::number(m_socket.peerPort()));
 }
 
-void Session::handleMessage() {
+void ClientSession::handleMessage() {
     MessageHeader header;
     if (!receiveMessage(m_socket, header, m_buffer)) {
         qKCritical() << "Can't read message header, clossing session";

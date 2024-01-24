@@ -6,7 +6,7 @@
 
 namespace kygon::server {
 
-class Session;
+class ClientSession;
 
 class ClientsMediator : public QObject {
     Q_OBJECT
@@ -28,7 +28,7 @@ private:
     // (so we can't just destroy object and don't care but need pointer to call deleteLater
     // on). I can't come up with anything but storing list of pointers and rejecting RAII
     // by now.
-    QList<Session*> m_clientSessions;
+    QList<ClientSession*> m_clientSessions;
 };
 
 }  // namespace kygon::server

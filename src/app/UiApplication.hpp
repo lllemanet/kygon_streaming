@@ -2,7 +2,7 @@
 
 #include <QGuiApplication>
 
-#include "Session.hpp"
+#include "ServerSession.hpp"
 
 namespace kygon::client {
 
@@ -17,7 +17,7 @@ public:
     bool init();
 
 private:
-    Session m_session;
+    ServerSession m_session;
 };
 
 }  // namespace kygon::client

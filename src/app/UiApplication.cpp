@@ -25,9 +25,9 @@ bool UiApplication::init() {
         return false;
     }
 
-    // TODO: recover
-    connect(&m_session, &Session::closed, []() {
-        qKCritical() << "Session closed, exitting app";
+    // TODO: recover?
+    connect(&m_session, &ServerSession::closed, []() {
+        qKCritical() << "ServerSession closed, exitting app";
         QCoreApplication::exit(-1);
     });
 

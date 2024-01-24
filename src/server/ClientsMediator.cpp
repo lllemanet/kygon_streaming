@@ -1,6 +1,6 @@
 #include "ClientsMediator.hpp"
 
-#include "Session.hpp"
+#include "ClientSession.hpp"
 #include "common/Utils.hpp"
 
 namespace kygon::server {
@@ -8,10 +8,10 @@ namespace kygon::server {
 ClientsMediator::ClientsMediator(QObject* parent) : QObject{parent} {}
 
 void ClientsMediator::addClientSession(QTcpSocket* socket) {
-    Session* session = new Session{*socket};
+    ClientSession* session = new ClientSession{*socket};
     m_clientSessions.push_back(session);
-    connect(session, &Session::closed, [this, session] {
-        qKDebug() << "Session closed: " << session->toString();
+    connect(session, &ClientSession::closed, [this, session] {
+        qKDebug() << "ServerSession closed: " << session->toString();
         m_clientSessions.removeOne(session);
         session->deleteLater();
     });

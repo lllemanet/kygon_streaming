@@ -10,9 +10,6 @@ namespace kygon {
 // TODO: protocol description
 enum MessageType : quint16 {
     Unknown = 0x0,
-    // Masks for client/server channels. We need to distinct channel by "talk" initiator. Talk in this context
-    // is sequential series of messages for one specific purpose. For example,
-    // TODO
     ClientChannel        = 0 << 15,
     ServerChannel        = 1 << 15,
     SendUserAuth         = ClientChannel | 0x1,
