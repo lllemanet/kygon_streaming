@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QGuiApplication>
+#include <QQmlApplicationEngine>
 
 #include "ServerSession.hpp"
 
@@ -17,6 +18,7 @@ public:
     bool init();
 
 private:
+    QQmlApplicationEngine m_qmlEngine;
     ServerSession m_session;
 };
 
