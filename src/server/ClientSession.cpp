@@ -16,6 +16,17 @@ ClientSession::ClientSession(QAbstractSocket& socket, QObject* parent)
     connect(&m_socket, &QAbstractSocket::disconnected, this, &ClientSession::closed);
 }
 
+void ClientSession::sendActiveUsers(const QByteArray& activeUsers) {
+    if (!sendMessage(m_socket, MessageType::SendActiveUsers, activeUsers)) {
+        qKCritical() << "Can't send SendActiveUsers, closing session";
+        Q_EMIT closed();
+    }
+}
+
+QByteArray ClientSession::getUsername() {
+    return m_username;
+}
+
 QString ClientSession::toString() {
     return QString(m_socket.peerAddress().toString() + ":" + QString::number(m_socket.peerPort()));
 }
@@ -23,7 +34,7 @@ QString ClientSession::toString() {
 void ClientSession::handleMessage() {
     MessageHeader header;
     if (!receiveMessage(m_socket, header, m_buffer)) {
-        qKCritical() << "Can't read message header, clossing session";
+        qKCritical() << "Can't read message header, closing session";
         Q_EMIT closed();
         return;
     }
@@ -35,13 +46,16 @@ void ClientSession::handleMessage() {
             return;
         }
 
-        if (!sendMessage(m_socket, MessageType::RespUserAuth)) {
-            qKCritical() << "Auth response failed, closing session";
+        if (!sendMessage(m_socket, MessageType::RespUserAuth, QByteArray{1, ResultCode::Ok})) {
+            qKCritical() << "Can't respond authenticated succeed";
             Q_EMIT closed();
             return;
         }
 
-        qKDebug() << "Client authenticated: username=" << m_buffer;
+        m_username = m_buffer;
+        qKDebug() << "Client started authentication: username=" << m_username;
+
+        Q_EMIT sessionAuth();
     }
 }
 

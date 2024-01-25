@@ -9,16 +9,17 @@ namespace kygon {
 
 // TODO: protocol description
 enum MessageType : quint16 {
-    Unknown = 0x0,
+    Unknown              = 0x0,
     ClientChannel        = 0 << 15,
     ServerChannel        = 1 << 15,
     SendUserAuth         = ClientChannel | 0x1,
     RespUserAuth         = ClientChannel | 0x2,
     SendUserMessage      = ClientChannel | 0x3,
-    RespUserMessage      = ClientChannel | 0x4,
-    SendBroadcastMessage = ServerChannel | 0x1,
-    RespBroadcastMessage = ServerChannel | 0x2,
+    SendActiveUsers      = ServerChannel | 0x1,
+    SendBroadcastMessage = ServerChannel | 0x3,
 };
+
+enum ResultCode : char { UnknownError = 0, Ok = 1 };
 
 using MessageLengthUint = quint32;
 

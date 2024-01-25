@@ -7,7 +7,7 @@ namespace kygon::client {
 
 /**
  * @brief Server session. Implements protocol interactions.
- * 
+ *
  */
 class ServerSession : public QObject {
     Q_OBJECT
@@ -20,7 +20,7 @@ public:
     bool init(QHostAddress address, quint16 port, QString username);
 
 Q_SIGNALS:
-    void sessionStarted(const QList<QByteArray>& activeUsers);
+    void activeUsersChanged(const QList<QByteArray>& activeUsers);
     void closed();
 
 private Q_SLOTS:
@@ -29,10 +29,10 @@ private Q_SLOTS:
 
 private:
     QTcpSocket m_socket;
+    bool m_authenticated;
     QString m_username;
     QList<QByteArray> m_activeUsers;
     QByteArray m_buffer;
-    bool m_authenticated;
 };
 
 }  // namespace kygon::client

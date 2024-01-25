@@ -33,15 +33,17 @@ void ServerSession::handleMessage() {
     }
 
     if (!m_authenticated) {
-        if (header.type != MessageType::RespUserAuth) {
-            qKCritical() << "Expected auth response";
+        if (header.type != MessageType::RespUserAuth || m_buffer[0] != ResultCode::Ok) {
+            qKCritical() << "Authentication failed";
             Q_EMIT closed();
             return;
         }
+        m_authenticated = true;
+    }
 
-        // Split comma-separated usernames
+    if (header.type == MessageType::SendActiveUsers) {
         m_activeUsers = m_buffer.split(',');
-        Q_EMIT sessionStarted(m_activeUsers);
+        Q_EMIT activeUsersChanged(m_activeUsers);
     }
 }
 
