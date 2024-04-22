@@ -7,7 +7,7 @@ namespace kygon::client {
 namespace {
 // TODO: temp
 QByteArray kUsername{"username1"};
-const QUrl kMainQmlUrl(u"qrc:/kygon/Main.qml"_qs);
+const QUrl kMainQmlUrl(u"qrc:/kygon/main.qml"_qs);
 }  // namespace
 
 UiApplication::UiApplication(int argc, char* argv[]) : QGuiApplication{argc, argv} {}
@@ -19,17 +19,17 @@ bool UiApplication::init() {
         return false;
     }
 
-    // Init ServerSession
+    // Init ChatManager
     QHostAddress address{arguments().at(1)};
     auto port = arguments().at(2).toUInt();
-    if (!m_session.init(address, port, kUsername)) {
+    if (!m_chatManager.init(address, port, kUsername)) {
         qKDebug() << "Can't init server session for " << address.toString() << ":" << port;
         return false;
     }
 
     // TODO: recover?
-    connect(&m_session, &ServerSession::closed, []() {
-        qKCritical() << "ServerSession closed, exitting app";
+    connect(&m_chatManager, &ChatManager::closed, []() {
+        qKCritical() << "ChatManager closed, exitting app";
         QCoreApplication::exit(-1);
     });
 

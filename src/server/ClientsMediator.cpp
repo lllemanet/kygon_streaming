@@ -28,7 +28,7 @@ void ClientsMediator::onSessionClosed() {
     }
     m_connectedSessions.removeOne(session);
     session->deleteLater();
-    qKDebug() << "ServerSession closed: " << session->toString();
+    qKDebug() << "ChatManager closed: " << session->toString();
 }
 
 void ClientsMediator::notifyActiveUsersChanged() {

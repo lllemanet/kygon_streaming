@@ -6,16 +6,16 @@
 namespace kygon::client {
 
 /**
- * @brief Server session. Implements protocol interactions.
+ * @brief Manages all interaction with the server. It's "Model" for "View" discarding Controller.
  *
  */
-class ServerSession : public QObject {
+class ChatManager : public QObject {
     Q_OBJECT
-    Q_DISABLE_COPY_MOVE(ServerSession)
+    Q_DISABLE_COPY_MOVE(ChatManager)
 
 public:
-    ServerSession(QObject* parent = nullptr);
-    virtual ~ServerSession() = default;
+    ChatManager(QObject* parent = nullptr);
+    virtual ~ChatManager() = default;
 
     bool init(QHostAddress address, quint16 port, QString username);
 

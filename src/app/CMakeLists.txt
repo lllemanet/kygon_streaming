@@ -1,11 +1,12 @@
-qt_add_executable(${PROJECT_NAME} main.cpp UiApplication.cpp ServerSession.cpp ../common/Protocol.cpp)
+set(APP_NAME ${PROJECT_NAME})
+qt_add_executable(${APP_NAME} main.cpp UiApplication.cpp ChatManager.cpp ../common/Protocol.cpp)
 
-qt_add_qml_module(${PROJECT_NAME}
-    URI ${PROJECT_NAME}
-    QML_FILES Main.qml
+qt_add_qml_module(${APP_NAME}
+    URI ${APP_NAME}
+    QML_FILES main.qml
 )
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Quick)
+target_compile_definitions(${APP_NAME} PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})
+target_link_libraries(${APP_NAME} PRIVATE Qt6::Quick)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE ON)
+set_target_properties(${APP_NAME} PROPERTIES WIN32_EXECUTABLE ON)

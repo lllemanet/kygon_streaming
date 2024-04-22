@@ -3,7 +3,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
-#include "ServerSession.hpp"
+#include "ChatManager.hpp"
 
 namespace kygon::client {
 
@@ -19,7 +19,7 @@ public:
 
 private:
     QQmlApplicationEngine m_qmlEngine;
-    ServerSession m_session;
+    ChatManager m_chatManager;
 };
 
 }  // namespace kygon::client

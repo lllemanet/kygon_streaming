@@ -17,7 +17,7 @@ public:
     /**
      * @brief Initialize the app. Should be called just after the constructor.
      *
-     * @return whether init succeed.
+     * @return whether init succeeded.
      */
     bool init();
 
