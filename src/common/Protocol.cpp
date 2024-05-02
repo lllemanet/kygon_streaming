@@ -20,7 +20,11 @@ bool receiveMessage(QAbstractSocket& socket, MessageHeader& res, QByteArray& buf
         return false;
     }
 
-    // TODO: very very bad, consider how to adapt QByteArray for your purposes
+    if (buffer.size() < res.length) {
+        buffer.resize(res.length);
+    } else {
+        buffer.remove(res.length, buffer.size() - res.length);
+    }
     buffer.resize(res.length);
 
     return (socket.read(buffer.data(), res.length) == res.length);

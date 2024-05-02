@@ -38,6 +38,7 @@ void ClientsMediator::notifyActiveUsersChanged() {
         activeUsers.append(session->getUsername());
         activeUsers.append(',');
     }
+    activeUsers.removeLast();
     for (ClientSession* session : m_authenticatedSessions) {
         session->sendActiveUsers(activeUsers);
     }
