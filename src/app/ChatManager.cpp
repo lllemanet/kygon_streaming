@@ -8,7 +8,7 @@ namespace kygon::client {
 namespace {
 // TODO: we need to use our own enum for our own network errors
 constexpr auto kNetworkError = QAbstractSocket::SocketError::NetworkError;
-}
+}  // namespace
 
 ChatManager::ChatManager(QObject* parent) : QObject{parent}, m_socket{}, m_authenticated{false} {}
 
@@ -48,8 +48,12 @@ void ChatManager::handleMessage() {
 
     if (header.type == MessageType::SendActiveUsers) {
         m_activeUsers = m_buffer.split(',');
-        Q_EMIT activeUsersChanged(m_activeUsers);
+        Q_EMIT activeUsersChanged();
     }
+}
+
+QList<QByteArray> ChatManager::activeUsers() const {
+    return m_activeUsers;
 }
 
 }  // namespace kygon::client

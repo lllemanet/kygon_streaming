@@ -8,7 +8,8 @@ namespace kygon::server {
 ClientsMediator::ClientsMediator(QObject* parent) : QObject{parent} {}
 
 void ClientsMediator::addClientSession(QTcpSocket* socket) {
-    ClientSession* session = new ClientSession{*socket};
+    // TODO: this socket can't be used from other thread (see QTcpServer::nextPendingConnection)
+    ClientSession* session = new ClientSession{*socket, this};
     m_connectedSessions.push_back(session);
     connect(session, &ClientSession::sessionAuth, this, &ClientsMediator::onSessionAuth);
     connect(session, &ClientSession::closed, this, &ClientsMediator::onSessionClosed);
@@ -28,7 +29,6 @@ void ClientsMediator::onSessionClosed() {
     }
     m_connectedSessions.removeOne(session);
     session->deleteLater();
-    qKDebug() << "ChatManager closed: " << session->toString();
 }
 
 void ClientsMediator::notifyActiveUsersChanged() {

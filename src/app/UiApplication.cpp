@@ -7,7 +7,7 @@ namespace kygon::client {
 namespace {
 // TODO: temp
 QByteArray kUsername{"username1"};
-const QUrl kMainQmlUrl(u"qrc:/kygon/main.qml"_qs);
+const QUrl kMainQmlUrl(u"qrc:/kygon/qml/main.qml"_qs);
 }  // namespace
 
 UiApplication::UiApplication(int argc, char* argv[]) : QGuiApplication{argc, argv} {}

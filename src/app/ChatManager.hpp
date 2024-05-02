@@ -1,8 +1,9 @@
 #pragma once
 
+#include <QtQml/qqmlregistration.h>
+
 #include <QObject>
 #include <QTcpSocket>
-#include <QtQml/qqmlregistration.h>
 
 namespace kygon::client {
 
@@ -16,13 +17,17 @@ class ChatManager : public QObject {
     QML_ELEMENT
     Q_DISABLE_COPY_MOVE(ChatManager)
 
+    Q_PROPERTY(QList<QByteArray> activeUsers READ activeUsers NOTIFY activeUsersChanged FINAL)
+
 public:
     ChatManager(QObject* parent = nullptr);
     virtual ~ChatManager() = default;
 
+    QList<QByteArray> activeUsers() const;
+
 Q_SIGNALS:
     void connectionError(QAbstractSocket::SocketError error);
-    void activeUsersChanged(const QList<QByteArray>& activeUsers);
+    void activeUsersChanged();
 
 public Q_SLOTS:
     bool init(QString address, quint16 port, QString username);

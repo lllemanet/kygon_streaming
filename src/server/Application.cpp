@@ -12,7 +12,6 @@ bool Application::init() {
                   << "Usage: " << arguments().at(0) << " <server-address> <server-port>";
         return false;
     }
-
     if (!connect(&m_server, &QTcpServer::newConnection,
                  [this]() { m_clientsMediator.addClientSession(m_server.nextPendingConnection()); })) {
         qKDebug() << "Can't connect QTcpServer::newConnection to clients mediator";

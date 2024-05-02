@@ -8,7 +8,7 @@ class QAbstractSocket;
 namespace kygon::server {
 
 /**
- * @brief Client session. Implements protocol interactions.
+ * @brief Client session. Implements protocol.
  *
  */
 class ClientSession : public QObject {

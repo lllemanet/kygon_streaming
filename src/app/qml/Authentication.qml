@@ -38,9 +38,7 @@ Rectangle {
             id: loginButton
             text: "Login"
             width: passwordTextField.width
-            onClicked:{
-                root.loginRequest(root.serverAddress, root.username, root.password);
-            }
+            onClicked: root.loginRequest(root.serverAddress, root.username, root.password);
         }
     }
 }

@@ -3,8 +3,6 @@
 #include <QAbstractSocket>
 #include <QHostAddress>
 
-#include "Utils.hpp"
-
 namespace kygon {
 
 bool sendMessage(QAbstractSocket& socket, MessageType type, const QByteArray& body) {
@@ -22,9 +20,8 @@ bool receiveMessage(QAbstractSocket& socket, MessageHeader& res, QByteArray& buf
         return false;
     }
 
-    if (buffer.size() < res.length) {
-        buffer.resize(res.length);
-    }
+    // TODO: very very bad, consider how to adapt QByteArray for your purposes
+    buffer.resize(res.length);
 
     return (socket.read(buffer.data(), res.length) == res.length);
 }

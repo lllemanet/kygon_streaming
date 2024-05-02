@@ -3,7 +3,11 @@ qt_add_executable(${APP_NAME} main.cpp UiApplication.cpp ChatManager.cpp ../comm
 
 qt_add_qml_module(${APP_NAME}
     URI ${APP_NAME}
-    QML_FILES main.qml Authentication.qml
+    QML_FILES
+        qml/main.qml
+        qml/Authentication.qml
+        qml/ActiveUsers.qml
+        qml/Chat.qml
 )
 
 target_compile_definitions(${APP_NAME} PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})
