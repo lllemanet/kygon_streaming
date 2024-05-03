@@ -19,6 +19,7 @@ public:
     ClientSession(QAbstractSocket& socket, QObject* parent = nullptr);
     virtual ~ClientSession() = default;
 
+    void respUserAuth(bool success);
     void sendActiveUsers(const QByteArray& activeUsers);
     void broadcastUserMessage(const QByteArray& msg);
 
@@ -35,6 +36,7 @@ private Q_SLOTS:
 
 private:
     QAbstractSocket& m_socket;
+    bool m_authenticated;
     QByteArray m_username;
     QByteArray m_buffer;
 };

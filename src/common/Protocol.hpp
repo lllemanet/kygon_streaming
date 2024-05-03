@@ -19,7 +19,7 @@ enum MessageType : quint16 {
     SendBroadcastMessage = ServerChannel | 0x3,
 };
 
-enum ResultCode : char { UnknownError = 0, Ok = 1 };
+enum ResultCode : char { UnknownError = 0, Ok = 1, InvalidUsername = 2 };
 
 using MessageLengthUint = quint32;
 

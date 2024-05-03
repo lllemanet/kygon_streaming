@@ -19,12 +19,23 @@ void ClientsMediator::addClientSession(QTcpSocket* socket) {
 void ClientsMediator::onSessionAuth() {
     ClientSession* session = dynamic_cast<ClientSession*>(QObject::sender());
     m_connectedSessions.removeOne(session);
+    for (auto* s : m_authenticatedSessions) {
+        if (s->getUsername() == session->getUsername()) {
+            kLog(Warning) << "Sessions with username=" << session->getUsername() << " already exists..."
+                          << "closing session";
+            session->respUserAuth(false);
+            Q_EMIT session->closed();
+            return;
+        }
+    }
+
+    kLog(Debug) << "Session with username=" << session->getUsername() << " is authenticated";
+    session->respUserAuth(true);
     m_authenticatedSessions.push_back(session);
     notifyActiveUsersChanged();
 }
 
-void ClientsMediator::onUserMessageReceived(const QByteArray& userMessage)
-{
+void ClientsMediator::onUserMessageReceived(const QByteArray& userMessage) {
     for (ClientSession* session : m_authenticatedSessions) {
         session->broadcastUserMessage(userMessage);
     }

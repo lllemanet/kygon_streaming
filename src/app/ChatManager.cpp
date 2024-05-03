@@ -22,8 +22,7 @@ bool ChatManager::init(QString address, quint16 port, QString username) {
     return true;
 }
 
-void ChatManager::sendUserMessage(QString message)
-{
+void ChatManager::sendUserMessage(QString message) {
     if (!sendMessage(m_socket, MessageType::SendUserMessage, message.toUtf8())) {
         kLog(Critical) << "Can't send user message";
         Q_EMIT connectionError(kNetworkError);
@@ -38,30 +37,33 @@ void ChatManager::onConnected() {
 }
 
 void ChatManager::handleMessage() {
-    MessageHeader header;
-    if (!receiveMessage(m_socket, header, m_buffer)) {
-        kLog(Critical) << "Can't read message header";
-        Q_EMIT connectionError(kNetworkError);
-        return;
-    }
-
-    if (!m_authenticated) {
-        if (header.type != MessageType::RespUserAuth || m_buffer[0] != ResultCode::Ok) {
-            kLog(Critical) << "Authentication failed";
+    while (m_socket.bytesAvailable()) {
+        MessageHeader header;
+        if (!receiveMessage(m_socket, header, m_buffer)) {
+            kLog(Critical) << "Can't read message header";
             Q_EMIT connectionError(kNetworkError);
             return;
         }
-        m_authenticated = true;
-    }
 
-    if (header.type == MessageType::SendActiveUsers) {
-        m_activeUsers = m_buffer.split(',');
-        Q_EMIT activeUsersChanged();
-    }
+        if (!m_authenticated) {
+            if (header.type != MessageType::RespUserAuth || m_buffer[0] != ResultCode::Ok) {
+                kLog(Critical) << "Authentication failed";
+                Q_EMIT connectionError(kNetworkError);
+                return;
+            }
+            kLog(Debug) << "User " << m_username << " is authenticated successfully";
+            m_authenticated = true;
+        }
 
-    if (header.type == MessageType::SendBroadcastMessage) {
-        m_userMessages.append(m_buffer);
-        Q_EMIT userMessagesChanged();
+        if (header.type == MessageType::SendActiveUsers) {
+            m_activeUsers = m_buffer.split(',');
+            Q_EMIT activeUsersChanged();
+        }
+
+        if (header.type == MessageType::SendBroadcastMessage) {
+            m_userMessages.append(m_buffer);
+            Q_EMIT userMessagesChanged();
+        }
     }
 }
 
@@ -69,8 +71,7 @@ QList<QByteArray> ChatManager::activeUsers() const {
     return m_activeUsers;
 }
 
-QList<QByteArray> ChatManager::userMessages() const
-{
+QList<QByteArray> ChatManager::userMessages() const {
     return m_userMessages;
 }
 
