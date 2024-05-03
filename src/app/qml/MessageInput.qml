@@ -6,6 +6,7 @@ import kygon
 
 Item {
     property int fontPixelSize: 16
+
     RowLayout {
         anchors.fill: parent
         spacing: 10
@@ -16,10 +17,11 @@ Item {
             ScrollBar.vertical.policy: ScrollBar.AlwaysOff
 
             TextArea {
-                id: messageTextField
+                id: messageTextArea
                 placeholderText: "Your Message"
                 wrapMode: TextEdit.Wrap
                 font.pixelSize: fontPixelSize
+                Keys.onReturnPressed: sendUserMessage();
             }
         }
 
@@ -33,7 +35,12 @@ Item {
             Layout.preferredWidth: 50
             Layout.preferredHeight: 50
 
-            onClicked: ChatManager.sendUserMessage(messageTextField.text);
+            onClicked: sendUserMessage();
         }
+    }
+
+    function sendUserMessage() {
+        ChatManager.sendUserMessage(messageTextArea.text);
+        messageTextArea.text = "";
     }
 }
