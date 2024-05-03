@@ -4,7 +4,7 @@
 int main(int argc, char* argv[]) {
     kygon::client::UiApplication app(argc, argv);
     if (!app.init()) {
-        qKCritical() << "Can't init UiApplication";
+        kLog(Critical) << "Can't init UiApplication";
         return -1;
     }
 

@@ -4,7 +4,7 @@
 int main(int argc, char* argv[]) {
     kygon::server::Application app{argc, argv};
     if (!app.init()) {
-        qKCritical() << "Can't init server Application, closing";
+        kLog(Critical) << "Can't init server Application, closing";
         return -1;
     }
 

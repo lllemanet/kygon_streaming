@@ -2,5 +2,4 @@
 
 #include <QDebug>
 
-#define qKDebug() qDebug().noquote().nospace()
-#define qKCritical() qCritical().noquote().nospace()
+#define kLog(level) q ## level().noquote().nospace()

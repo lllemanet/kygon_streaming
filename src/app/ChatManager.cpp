@@ -25,14 +25,14 @@ bool ChatManager::init(QString address, quint16 port, QString username) {
 void ChatManager::sendUserMessage(QString message)
 {
     if (!sendMessage(m_socket, MessageType::SendUserMessage, message.toUtf8())) {
-        qKCritical() << "Can't send user message";
+        kLog(Critical) << "Can't send user message";
         Q_EMIT connectionError(kNetworkError);
     }
 }
 
 void ChatManager::onConnected() {
     if (!sendMessage(m_socket, MessageType::SendUserAuth, m_username.toUtf8())) {
-        qKCritical() << "Can't send user auth";
+        kLog(Critical) << "Can't send user auth";
         Q_EMIT connectionError(kNetworkError);
     }
 }
@@ -40,14 +40,14 @@ void ChatManager::onConnected() {
 void ChatManager::handleMessage() {
     MessageHeader header;
     if (!receiveMessage(m_socket, header, m_buffer)) {
-        qKCritical() << "Can't read message header";
+        kLog(Critical) << "Can't read message header";
         Q_EMIT connectionError(kNetworkError);
         return;
     }
 
     if (!m_authenticated) {
         if (header.type != MessageType::RespUserAuth || m_buffer[0] != ResultCode::Ok) {
-            qKCritical() << "Authentication failed";
+            kLog(Critical) << "Authentication failed";
             Q_EMIT connectionError(kNetworkError);
             return;
         }

@@ -18,7 +18,7 @@ ClientSession::ClientSession(QAbstractSocket& socket, QObject* parent)
 
 void ClientSession::sendActiveUsers(const QByteArray& activeUsers) {
     if (!sendMessage(m_socket, MessageType::SendActiveUsers, activeUsers)) {
-        qKCritical() << "Can't send SendActiveUsers, closing session";
+        kLog(Critical) << "Can't send SendActiveUsers, closing session";
         Q_EMIT closed();
     }
 }
@@ -26,7 +26,7 @@ void ClientSession::sendActiveUsers(const QByteArray& activeUsers) {
 void ClientSession::broadcastUserMessage(const QByteArray &msg)
 {
     if (!sendMessage(m_socket, MessageType::SendBroadcastMessage, msg)) {
-        qKCritical() << "Can't send SendBroadcastMessage, closing session";
+        kLog(Critical) << "Can't send SendBroadcastMessage, closing session";
         Q_EMIT closed();
     }
 }
@@ -42,7 +42,7 @@ QString ClientSession::toString() {
 void ClientSession::handleMessage() {
     MessageHeader header;
     if (!receiveMessage(m_socket, header, m_buffer)) {
-        qKCritical() << "Can't read message header, closing session";
+        kLog(Critical) << "Can't read message header, closing session";
         Q_EMIT closed();
         return;
     }
@@ -50,19 +50,19 @@ void ClientSession::handleMessage() {
     // if not authenticated
     if (m_username.size() == 0) {
         if (header.type != MessageType::SendUserAuth) {
-            qKCritical() << "User didn't authenticated, closing session";
+            kLog(Critical) << "User didn't authenticated, closing session";
             Q_EMIT closed();
             return;
         }
 
         if (!sendMessage(m_socket, MessageType::RespUserAuth, QByteArray{1, ResultCode::Ok})) {
-            qKCritical() << "Can't respond authenticated succeed";
+            kLog(Critical) << "Can't respond authenticated succeed";
             Q_EMIT closed();
             return;
         }
 
         m_username = m_buffer;
-        qKDebug() << "Client started authentication: username=" << m_username;
+        kLog(Debug) << "Client started authentication: username=" << m_username;
 
         Q_EMIT sessionAuth();
     }
