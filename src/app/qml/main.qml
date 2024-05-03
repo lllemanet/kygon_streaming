@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Dialogs
 import QtQuick.Layouts
 
 import kygon
@@ -39,11 +40,19 @@ ApplicationWindow {
         }
     }
 
+    MessageDialog {
+        id: errorDialog
+        title: "Error"
+    }
+
     Connections {
         target: ChatManager
 
         function onConnectionError(socketError) {
             console.log("Connection error");
+            errorDialog.text = "Connection error";
+            errorDialog.visible = true;
+
         }
 
         function onActiveUsersChanged() {
