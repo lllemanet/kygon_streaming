@@ -8,6 +8,8 @@ qt_add_qml_module(${APP_NAME}
         qml/Authentication.qml
         qml/ActiveUsers.qml
         qml/Chat.qml
+        qml/MessageInput.qml
+        qml/UserMessages.qml
 )
 
 target_compile_definitions(${APP_NAME} PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})

@@ -27,6 +27,7 @@ Rectangle {
         TextField {
             id: usernameTextField
             placeholderText: "Username"
+            text: "Username" + Math.floor(Math.random() * 1000);
         }
 
         TextField {

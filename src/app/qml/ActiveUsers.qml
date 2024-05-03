@@ -3,14 +3,14 @@ import QtQuick
 import kygon
 
 Rectangle {
-    property int usernameFontPixelSize: 14
+    property int usernameFontPixelSize: 16
 
     color: "#E0E0E0"
     radius: 10
 
     ListView {
         anchors.fill: parent
-        spacing: 10
+        spacing: 5
 
         model: ChatManager.activeUsers
         delegate: Rectangle {

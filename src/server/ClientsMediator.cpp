@@ -12,6 +12,7 @@ void ClientsMediator::addClientSession(QTcpSocket* socket) {
     ClientSession* session = new ClientSession{*socket, this};
     m_connectedSessions.push_back(session);
     connect(session, &ClientSession::sessionAuth, this, &ClientsMediator::onSessionAuth);
+    connect(session, &ClientSession::userMessageReceived, this, &ClientsMediator::onUserMessageReceived);
     connect(session, &ClientSession::closed, this, &ClientsMediator::onSessionClosed);
 }
 
@@ -20,6 +21,13 @@ void ClientsMediator::onSessionAuth() {
     m_connectedSessions.removeOne(session);
     m_authenticatedSessions.push_back(session);
     notifyActiveUsersChanged();
+}
+
+void ClientsMediator::onUserMessageReceived(const QByteArray& userMessage)
+{
+    for (ClientSession* session : m_authenticatedSessions) {
+        session->broadcastUserMessage(userMessage);
+    }
 }
 
 void ClientsMediator::onSessionClosed() {

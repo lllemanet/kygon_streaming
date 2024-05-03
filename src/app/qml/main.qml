@@ -34,7 +34,7 @@ ApplicationWindow {
         }
 
         Chat {
-            Layout.preferredWidth: parent.width * 0.8
+            Layout.fillWidth: true
             Layout.fillHeight: true
         }
     }

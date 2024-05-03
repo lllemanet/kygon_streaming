@@ -25,6 +25,7 @@ public:
 
 private Q_SLOTS:
     void onSessionAuth();
+    void onUserMessageReceived(const QByteArray& userMessage);
     void onSessionClosed();
 
 private:
