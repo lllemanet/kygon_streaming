@@ -1,7 +1,7 @@
-set(APP_NAME ${PROJECT_NAME})
+set(APP_NAME ${PROJECT_NAME}_client)
 qt_add_executable(${APP_NAME} main.cpp UiApplication.cpp ChatManager.cpp ../common/Protocol.cpp)
 
-qt_add_qml_module(${APP_NAME}
+qt_add_qml_module(${PROJECT_NAME}
     URI ${APP_NAME}
     QML_FILES
         qml/main.qml
