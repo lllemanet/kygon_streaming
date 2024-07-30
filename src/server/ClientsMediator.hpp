@@ -2,7 +2,7 @@
 
 #include <QObject>
 #include <QTcpSocket>
-#include <Qlist>
+#include <QList>
 
 namespace kygon::server {
 
