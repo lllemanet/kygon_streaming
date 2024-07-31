@@ -35,6 +35,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     bool init(QString address, quint16 port, QString username);
     void sendUserMessage(QString message);
+    void startStream();
 
 private Q_SLOTS:
     void onConnected();

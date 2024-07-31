@@ -29,7 +29,7 @@ ApplicationWindow {
         visible: false
         spacing: 10
 
-        ActiveUsers {
+        LeftPanel {
             Layout.preferredWidth: parent.width * 0.2
             Layout.fillHeight: true
         }

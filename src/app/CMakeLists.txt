@@ -1,5 +1,11 @@
 set(APP_NAME ${PROJECT_NAME})
-qt_add_executable(${APP_NAME} main.cpp UiApplication.cpp ChatManager.cpp ../common/Protocol.cpp)
+qt_add_executable(${APP_NAME}
+    main.cpp
+    UiApplication.cpp
+    ChatManager.cpp
+    ../common/Protocol.cpp
+    ../common/UserDto.cpp
+)
 
 qt_add_qml_module(${APP_NAME}
     URI ${APP_NAME}
@@ -10,6 +16,7 @@ qt_add_qml_module(${APP_NAME}
         qml/Chat.qml
         qml/MessageInput.qml
         qml/UserMessages.qml
+        qml/LeftPanel.qml
 )
 
 target_compile_definitions(${APP_NAME} PRIVATE ${GLOBAL_COMPILE_DEFINITIONS})

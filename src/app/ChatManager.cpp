@@ -29,6 +29,13 @@ void ChatManager::sendUserMessage(QString message) {
     }
 }
 
+void ChatManager::startStream() {
+    if (!sendMessage(m_socket, MessageType::SendStartStream)) {
+        kLog(Critical) << "Can't send start stream";
+        Q_EMIT connectionError(kNetworkError);
+    }
+}
+
 void ChatManager::onConnected() {
     if (!sendMessage(m_socket, MessageType::SendUserAuth, m_username.toUtf8())) {
         kLog(Critical) << "Can't send user auth";

@@ -9,7 +9,7 @@
 namespace kygon::server {
 
 ClientSession::ClientSession(QAbstractSocket& socket, QObject* parent)
-    : QObject{parent}, m_socket{socket}, m_authenticated{false} {
+    : QObject{parent}, m_socket{socket}, m_authenticated{false}, m_streaming{false} {
     m_socket.setParent(this);
     connect(&m_socket, &QAbstractSocket::readyRead, this, &ClientSession::handleMessage);
     connect(&m_socket, &QAbstractSocket::errorOccurred, this, &ClientSession::closed);
@@ -44,6 +44,10 @@ QByteArray ClientSession::getUsername() {
     return m_username;
 }
 
+bool ClientSession::isStreaming() {
+    return m_streaming;
+}
+
 QString ClientSession::toString() {
     return QString(m_socket.peerAddress().toString() + ":" + QString::number(m_socket.peerPort()));
 }
@@ -56,6 +60,7 @@ void ClientSession::handleMessage() {
         return;
     }
 
+    // First session must be authenticated
     if (!m_authenticated) {
         if (header.type != MessageType::SendUserAuth) {
             kLog(Critical) << "User didn't authenticated, closing session";
@@ -69,9 +74,16 @@ void ClientSession::handleMessage() {
         Q_EMIT sessionAuth();
     }
 
-    if (header.type == MessageType::SendUserMessage) {
-        m_buffer.prepend(m_username + ": ");
-        Q_EMIT userMessageReceived(m_buffer);
+    switch (header.type) {
+        case MessageType::SendUserMessage: {
+            m_buffer.prepend(m_username + ": ");
+            Q_EMIT userMessageReceived(m_buffer);
+            break;
+        }
+        case MessageType::SendStartStream: {
+            m_streaming = true;
+            Q_EMIT startedStreaming();
+        }
     }
 }
 
