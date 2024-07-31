@@ -41,5 +41,7 @@ Rectangle {
             width: passwordTextField.width
             onClicked: root.loginRequest(root.serverAddress, root.username, root.password);
         }
+        // Auto authentication for debug purposes
+        // Component.onCompleted: root.loginRequest(root.serverAddress, root.username, root.password);
     }
 }

@@ -24,10 +24,12 @@ public:
     void broadcastUserMessage(const QByteArray& msg);
 
     QByteArray getUsername();
+    bool isStreaming();
     QString toString();
 
 Q_SIGNALS:
     void sessionAuth();
+    void startedStreaming();
     void userMessageReceived(const QByteArray& msg);
     void closed();
 
@@ -37,6 +39,7 @@ private Q_SLOTS:
 private:
     QAbstractSocket& m_socket;
     bool m_authenticated;
+    bool m_streaming;
     QByteArray m_username;
     QByteArray m_buffer;
 };

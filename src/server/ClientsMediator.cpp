@@ -1,6 +1,7 @@
 #include "ClientsMediator.hpp"
 
 #include "ClientSession.hpp"
+#include "common/UserDto.hpp"
 #include "common/Utils.hpp"
 
 namespace kygon::server {
@@ -12,6 +13,7 @@ void ClientsMediator::addClientSession(QTcpSocket* socket) {
     ClientSession* session = new ClientSession{*socket, this};
     m_connectedSessions.push_back(session);
     connect(session, &ClientSession::sessionAuth, this, &ClientsMediator::onSessionAuth);
+    connect(session, &ClientSession::startedStreaming, this, &ClientsMediator::notifyActiveUsersChanged);
     connect(session, &ClientSession::userMessageReceived, this, &ClientsMediator::onUserMessageReceived);
     connect(session, &ClientSession::closed, this, &ClientsMediator::onSessionClosed);
 }
@@ -54,7 +56,8 @@ void ClientsMediator::notifyActiveUsersChanged() {
     // TODO: 1. Consider ServerState and ServerStateChange and serialization
     QByteArray activeUsers;
     for (ClientSession* session : m_authenticatedSessions) {
-        activeUsers.append(session->getUsername());
+        UserDto userDto{this, session->getUsername(), session->isStreaming()};
+        activeUsers.append(userDto.encode());
         activeUsers.append(',');
     }
     activeUsers.removeLast();

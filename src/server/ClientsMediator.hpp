@@ -1,8 +1,8 @@
 #pragma once
 
+#include <QList>
 #include <QObject>
 #include <QTcpSocket>
-#include <QList>
 
 namespace kygon::server {
 

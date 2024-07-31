@@ -14,15 +14,14 @@ Rectangle {
 
         model: ChatManager.activeUsers
         delegate: Rectangle {
-            required property string modelData
 
             height: usernameFontPixelSize + 5
             width: parent.width
 
             Text {
                 anchors.centerIn: parent
-                text: modelData
-                font.pixelSize: usernameFontPixelSize
+                text: model.username
+                font.pixelSize: model.streaming ? usernameFontPixelSize + 10 : usernameFontPixelSize
             }
         }
     }

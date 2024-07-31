@@ -15,6 +15,8 @@ enum MessageType : quint16 {
     SendUserAuth         = ClientChannel | 0x1,
     RespUserAuth         = ClientChannel | 0x2,
     SendUserMessage      = ClientChannel | 0x3,
+    SendStartStream      = ClientChannel | 0x4,
+    RespStartStream      = ClientChannel | 0x5,
     SendActiveUsers      = ServerChannel | 0x1,
     SendBroadcastMessage = ServerChannel | 0x3,
 };

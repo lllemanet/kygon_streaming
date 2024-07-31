@@ -29,6 +29,13 @@ void ChatManager::sendUserMessage(QString message) {
     }
 }
 
+void ChatManager::startStream() {
+    if (!sendMessage(m_socket, MessageType::SendStartStream)) {
+        kLog(Critical) << "Can't send start stream";
+        Q_EMIT connectionError(kNetworkError);
+    }
+}
+
 void ChatManager::onConnected() {
     if (!sendMessage(m_socket, MessageType::SendUserAuth, m_username.toUtf8())) {
         kLog(Critical) << "Can't send user auth";
@@ -56,7 +63,13 @@ void ChatManager::handleMessage() {
         }
 
         if (header.type == MessageType::SendActiveUsers) {
-            m_activeUsers = m_buffer.split(',');
+            qDeleteAll(m_activeUsers);
+            m_activeUsers.clear();
+            for (const auto& userBytes : m_buffer.split(',')) {
+                UserDto* userDto = new UserDto(this);
+                userDto->decode(userBytes);
+                m_activeUsers.push_back(userDto);
+            }
             Q_EMIT activeUsersChanged();
         }
 
@@ -67,8 +80,8 @@ void ChatManager::handleMessage() {
     }
 }
 
-QList<QByteArray> ChatManager::activeUsers() const {
-    return m_activeUsers;
+QQmlListProperty<UserDto> ChatManager::activeUsers() {
+    return QQmlListProperty<UserDto>(this, &m_activeUsers);
 }
 
 QList<QByteArray> ChatManager::userMessages() const {
